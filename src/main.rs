@@ -1,4 +1,5 @@
 use clap::{App, Arg, SubCommand};
+use std::ffi::OsString;
 pub mod lib;
 
 #[tokio::main]
@@ -21,18 +22,32 @@ async fn main() {
                 .arg(
                     Arg::with_name("message")
                         .short("m")
+                        .long("--message")
+                        .takes_value(true)
                         .help("String to pass into a Telegram message"),
                 ),
         )
         .get_matches();
 
-    // Handle user input
+    // Handle each command
     match matches.subcommand_name() {
         Some("test") => tepe.reply_chat_id().await,
-        Some("send") => tepe.send(Some("text"), None).await,
+        Some("send") => {
+            let command = matches.subcommand().1.unwrap();
+            let mut files = None;
+            let mut message = None;
 
+            if let Some(file_args) = command.args.get("files") {
+                files = Some(&file_args.vals);
+            }
+
+            if let Some(message_arg) = command.args.get("message") {
+                message = Some(&message_arg.vals[0].into());
+            }
+
+            tepe.send(message, files).await
+        }
+        // Some("prompt") => {}, // TODO
         _ => {}
     }
-
-    // println!("Value for config: {:?}", matches);
 }

@@ -1,3 +1,4 @@
+use std::ffi::OsString;
 use std::sync::Arc;
 use teloxide::{prelude::*, utils::markdown};
 
@@ -64,7 +65,14 @@ impl TelegramBot {
             .await;
     }
 
-    pub async fn send(&self, text: Option<&str>, files_paths: Option<&[&str]>) {
-        // self.bot.send_message(self.default_chat_id, text).send().await.unwrap();
+    // .unwrap()
+    // .vals
+
+    pub async fn send(&self, message: Option<&OsString>, files_paths: Option<&Vec<OsString>>) {
+        // self.bot
+        //     .send_message(self.default_chat_id, text)
+        //     .send()
+        //     .await
+        //     .unwrap();
     }
 }
