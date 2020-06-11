@@ -1,42 +1,38 @@
 use clap::{App, Arg, SubCommand};
-use teloxide::prelude::*;
+pub mod lib;
 
 #[tokio::main]
 async fn main() {
-    // let args = Cli::from_args();
-    // send_message(&args.message).await;
+    // TODO: add option to manually add bot_token and chat_id
+    let tepe = lib::TelegramBot::new();
 
+    // Define CLI
     let matches = App::new("Tepe")
-        .version("1.0")
+        .version("0.1")
         .author("Hermitter")
         .about("Send messages and files through a telegram bot.")
-        .arg(
-            Arg::with_name("config")
-                .short("c")
-                .long("config")
-                .value_name("FILE")
-                .help("Sets a custom config file")
-                .takes_value(true),
-        )
         .subcommand(
             SubCommand::with_name("test")
-                .about("controls testing features")
-                .version("1.3")
-                .author("Hermitter")
+                .about("Test to check that the bot is properly working. Once messaged, the bot will respond reply with the chat_id")
+        )
+        .subcommand(
+            SubCommand::with_name("send")
+                .arg(Arg::with_name("files").required(false).multiple(true))
                 .arg(
-                    Arg::with_name("debug")
-                        .short("d")
-                        .help("print debug information verbosely"),
+                    Arg::with_name("string")
+                        .short("s")
+                        .help("String to pass into a Telegram message"),
                 ),
         )
         .get_matches();
 
-    // Gets a value for config if supplied by user, or defaults to "default.conf"
-    // let config = matches.value_of("config").unwrap_or("default.conf");
-    println!("Value for config: {:?}", matches);
-}
+    // Handle user input
+    match matches.subcommand_name() {
+        Some("test") => tepe.reply_chat_id().await,
+        Some("send") => tepe.send(Some("text"), None).await,
 
-async fn send_message(text: &str) {
-    let bot = Bot::new("ADD_BOT_TOKEN_HERE");
-    bot.send_message(826526167, text).send().await.unwrap();
+        _ => {}
+    }
+
+    // println!("Value for config: {:?}", matches);
 }
