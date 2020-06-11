@@ -1,31 +1,32 @@
 use std::ffi::OsString;
+use std::path::PathBuf;
 use std::sync::Arc;
-use teloxide::{prelude::*, utils::markdown};
+use teloxide::{prelude::*, types::InputFile, utils::markdown};
 
 pub struct TelegramBot {
     /// Teleoxide representation of a Telegram bot
     pub bot: Arc<Bot>,
 
     /// Default destination for messages
-    pub default_chat_id: u64,
+    pub default_chat_id: i64,
 }
 
 impl TelegramBot {
     /// Instantiate a Telegram bot from environment variables.
     pub fn new() -> TelegramBot {
         let default_chat_id = std::env::var("TEPE_TELEGRAM_CHAT_ID")
-            .expect("TEPE_TELEGRAM_CHAT_ID has not been set!")
-            .parse::<u64>()
+            .expect("TEPE_TELEGRAM_CHAT_ID has not been set")
+            .parse::<i64>()
             .expect("Invalid format for TEPE_TELEGRAM_CHAT_ID");
 
         let token = std::env::var("TEPE_TELEGRAM_BOT_TOKEN")
-            .expect("TEPE_TELEGRAM_BOT_TOKEN has not been set!");
+            .expect("TEPE_TELEGRAM_BOT_TOKEN has not been set");
 
         TelegramBot::from(&token, default_chat_id)
     }
 
     /// Instantiate a Telegram bot from argument variables.
-    pub fn from(token: &str, default_chat_id: u64) -> TelegramBot {
+    pub fn from(token: &str, default_chat_id: i64) -> TelegramBot {
         TelegramBot {
             default_chat_id,
             bot: Bot::new(
@@ -65,11 +66,20 @@ impl TelegramBot {
             .await;
     }
 
-    pub async fn send(&self, message: Option<&OsString>, files_paths: Option<&Vec<OsString>>) {
-        // self.bot
-        //     .send_message(self.default_chat_id, text)
-        //     .send()
-        //     .await
-        //     .unwrap();
+    /// Send a document or text message
+    // TODO: Use relevant Telegram API for specific media.
+    pub async fn send(&self, message: Option<&str>, files_paths: Option<&Vec<OsString>>) {
+        // TODO: allow text messages to be sent without files
+        let message = message.unwrap_or("");
+
+        let request = self
+            .bot
+            .send_document(
+                self.default_chat_id,
+                InputFile::file(PathBuf::from("./saturn.jpg").as_path()),
+            )
+            .caption(message);
+
+        request.send().await.unwrap();
     }
 }

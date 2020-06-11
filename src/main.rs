@@ -42,7 +42,7 @@ async fn main() {
             }
 
             if let Some(message_arg) = command.args.get("message") {
-                message = Some(&message_arg.vals[0].into());
+                message = Some(message_arg.vals[0].to_str().expect("Invalid --message"));
             }
 
             tepe.send(message, files).await
