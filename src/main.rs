@@ -19,8 +19,8 @@ async fn main() {
             SubCommand::with_name("send")
                 .arg(Arg::with_name("files").required(false).multiple(true))
                 .arg(
-                    Arg::with_name("string")
-                        .short("s")
+                    Arg::with_name("message")
+                        .short("m")
                         .help("String to pass into a Telegram message"),
                 ),
         )
