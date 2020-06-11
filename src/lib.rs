@@ -65,9 +65,6 @@ impl TelegramBot {
             .await;
     }
 
-    // .unwrap()
-    // .vals
-
     pub async fn send(&self, message: Option<&OsString>, files_paths: Option<&Vec<OsString>>) {
         // self.bot
         //     .send_message(self.default_chat_id, text)
