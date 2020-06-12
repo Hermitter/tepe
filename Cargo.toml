@@ -11,5 +11,5 @@ teloxide = "0.2.0"
 log = "0.4.8"
 tokio = "0.2.11"
 pretty_env_logger = "0.4.0"
-clap = "2.33.1"
+clap = {version = "2.33.1", features = ["yaml"]}
 lazy_static = "1.4.0"

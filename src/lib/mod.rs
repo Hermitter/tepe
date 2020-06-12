@@ -40,15 +40,14 @@ impl TelegramBot {
         }
 
         // token from flag or environment variable.
-        let token = std::env::var("TEPE_TELEGRAM_BOT_TOKEN").unwrap_or({
-            match command.args.get("token") {
-                Some(arg) => arg.vals[0]
-                    .clone()
-                    .into_string()
-                    .expect("Could not read (--token, -t) argument"),
-                None => panic!("TEPE_TELEGRAM_BOT_TOKEN has not been set"),
-            }
-        });
+        let token = match command.args.get("token") {
+            Some(arg) => arg.vals[0]
+                .clone()
+                .into_string()
+                .expect("Could not read (--token, -t) argument"),
+            None => std::env::var("TEPE_TELEGRAM_BOT_TOKEN")
+                .expect("TEPE_TELEGRAM_BOT_TOKEN has not been set"),
+        };
 
         TelegramBot {
             bot: Bot::new(token),
@@ -92,8 +91,10 @@ impl TelegramBot {
                 .send_message(chat_id.clone(), text)
                 .send()
                 .await
-                .log_on_error()
-                .await;
+                .unwrap_or_else(|err| {
+                    eprintln!("Error sending message: {}", err);
+                    std::process::exit(1);
+                });
         }
     }
 }
