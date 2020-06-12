@@ -9,7 +9,6 @@ impl TelegramBot {
     /// Send a document or text message
     // TODO: Use relevant Telegram API for specific media.
     pub async fn send(&self, message: Option<&str>, file_paths: &Vec<OsString>) {
-        let mut requests = vec![];
         let message = message.unwrap_or("");
 
         match file_paths.len() {
@@ -39,10 +38,6 @@ impl TelegramBot {
                     self.send_text_message(message).await;
                 }
             }
-        }
-
-        for file_path in file_paths {
-            requests.push(12);
         }
     }
 
