@@ -7,7 +7,6 @@ use teloxide::{prelude::*, requests::Request};
 
 impl TelegramBot {
     /// Send a document or text message
-    // TODO: Use relevant Telegram API for specific media.
     pub async fn send(&self, message: Option<&str>, file_paths: &Vec<OsString>) {
         let message = message.unwrap_or("");
 
@@ -57,7 +56,6 @@ impl TelegramBot {
             .unwrap_or(&FileGroup::Document);
 
         // TODO: check if file exists
-        // println!()
         let file = InputFile::file(file);
 
         match *file_group {
