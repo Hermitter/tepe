@@ -19,14 +19,14 @@ impl TelegramBot {
                     self.send_text_message(message).await;
                 }
             }
-            // single file and a potential caption
+            // single file and an optional text caption
             1 => {
                 self.create_file_request(PathBuf::from(&file_paths[0]), message)
                     .send()
                     .await
                     .unwrap();
             }
-            // multiple files and a potential message
+            // multiple files and an optional text
             _ => {
                 for file_path in file_paths {
                     self.create_file_request(PathBuf::from(file_path), "")
