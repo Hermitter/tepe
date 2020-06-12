@@ -22,7 +22,7 @@ cargo install --path .
 
 ### 2. Create Your Bot & Export The Bot Token
 
-Talk to [@Botfather](https://t.me/botfather) and go through some dialog option until you've successfully created a bot. You should receive a token in the format of `123456789:blablabla`
+Talk to [@Botfather](https://t.me/botfather) and go through some dialog options until you've successfully created a bot. You should receive a token in the format of `123456789:blablabla`
 
 Once your bot is created, export its token as an environmental variable.
 
