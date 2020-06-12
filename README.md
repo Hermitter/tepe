@@ -44,7 +44,7 @@ Use the following command to have your bot wait for a user response. Once receiv
 tepe test
 ```
 
-You can start talking to your bot by visiting (https://t.me/your_bot_name_here).
+You can start talking to your bot by visiting (https://t.me/YOUR_BOT_NAME_HERE).
 
 ### 4. Send Messages
 
