@@ -4,6 +4,7 @@ extern crate lazy_static;
 #[macro_use]
 extern crate clap;
 use clap::App;
+use std::ffi::OsString;
 
 pub mod lib;
 
@@ -22,7 +23,7 @@ async fn main() {
             let command = app.subcommand().1.unwrap();
             let tepe = lib::TelegramBot::from(&command);
 
-            let mut files = &vec![];
+            let mut files = &Vec::<OsString>::new();
             let mut message = None;
 
             // get file paths
@@ -32,7 +33,7 @@ async fn main() {
 
             // get message
             if let Some(message_arg) = command.args.get("message") {
-                message = Some(message_arg.vals[0].to_str().expect("Invalid --message"));
+                message = message_arg.vals[0].to_str();
             }
 
             tepe.send(message, files).await;
