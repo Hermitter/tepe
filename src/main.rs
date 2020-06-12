@@ -1,5 +1,6 @@
+#[macro_use]
+extern crate lazy_static;
 use clap::{App, Arg, SubCommand};
-use std::ffi::OsString;
 pub mod lib;
 
 #[tokio::main]
@@ -34,13 +35,15 @@ async fn main() {
         Some("test") => tepe.reply_chat_id().await,
         Some("send") => {
             let command = matches.subcommand().1.unwrap();
-            let mut files = None;
+            let mut files = &vec![];
             let mut message = None;
 
+            // get file paths
             if let Some(file_args) = command.args.get("files") {
-                files = Some(&file_args.vals);
+                files = &file_args.vals;
             }
 
+            // get message
             if let Some(message_arg) = command.args.get("message") {
                 message = Some(message_arg.vals[0].to_str().expect("Invalid --message"));
             }

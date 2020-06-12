@@ -1,7 +1,11 @@
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::sync::Arc;
-use teloxide::{prelude::*, types::InputFile, utils::markdown};
+use teloxide::types::InputFile;
+use teloxide::{prelude::*, requests::Request, utils::markdown};
+mod file_ext;
+mod send;
+use file_ext::{FileGroup, FILE_EXT_HASHMAP};
 
 pub struct TelegramBot {
     /// Teleoxide representation of a Telegram bot
@@ -25,7 +29,7 @@ impl TelegramBot {
         TelegramBot::from(&token, default_chat_id)
     }
 
-    /// Instantiate a Telegram bot from argument variables.
+    /// Instantiate a Telegram bot from function arguments.
     pub fn from(token: &str, default_chat_id: i64) -> TelegramBot {
         TelegramBot {
             default_chat_id,
@@ -66,20 +70,12 @@ impl TelegramBot {
             .await;
     }
 
-    /// Send a document or text message
-    // TODO: Use relevant Telegram API for specific media.
-    pub async fn send(&self, message: Option<&str>, files_paths: Option<&Vec<OsString>>) {
-        // TODO: allow text messages to be sent without files
-        let message = message.unwrap_or("");
-
-        let request = self
-            .bot
-            .send_document(
-                self.default_chat_id,
-                InputFile::file(PathBuf::from("./saturn.jpg").as_path()),
-            )
-            .caption(message);
-
-        request.send().await.unwrap();
+    /// Send a text message to the default group_id.
+    pub async fn send_text_message(&self, text: &str) {
+        self.bot
+            .send_message(self.default_chat_id, text)
+            .send()
+            .await
+            .unwrap();
     }
 }
