@@ -1,45 +1,45 @@
 name: Tepe
-version: "0.1"
+version: "0.0.0"
 author: Hermitter
 about: Send messages and files through a telegram bot.
 args:
-      - config:
-              short: c
-              long: config
-              value_name: FILE
-              help: Sets a custom config file
-              takes_value: true
+        - config:
+                  short: c
+                  long: config
+                  value_name: FILE
+                  help: Sets a custom config file
+                  takes_value: true
 subcommands:
-      - test:
-              about: Test to check that the bot is properly working. Once messaged, the bot will respond reply with the chat_id
-              args:
-                    - token:
-                            short: t
-                            long: token
-                            takes_value: true
-                            max_values: 1
-                            help: Telegram bot token.
-      - send:
-              about: Send files and or a string to each chat_id passed.
-              settings: AllowNegativeNumbers
-              args:
-                    - files:
-                            required: false
-                            multiple: true
-                    - message:
-                            short: m
-                            long: message
-                            takes_value: true
-                            help: String to pass into a Telegram message.
-                    - token:
-                            short: t
-                            long: token
-                            takes_value: true
-                            max_values: 1
-                            help: Telegram bot token.
-                    - chat_ids:
-                            short: c
-                            long: chat
-                            multiple: true
-                            takes_value: true
-                            help: Telegram chat id.
+        - test:
+                  about: Test to check that the bot is properly working. Once messaged, the bot will respond reply with the chat_id
+                  args:
+                          - token:
+                                    short: t
+                                    long: token
+                                    takes_value: true
+                                    max_values: 1
+                                    help: Sets the Telegram bot token. This ignores TEPE_TELEGRAM_BOT_TOKEN.
+        - send:
+                  about: Send files and or a string to each chat_id passed.
+                  settings: AllowNegativeNumbers
+                  args:
+                          - files:
+                                    required: false
+                                    multiple: true
+                          - message:
+                                    short: m
+                                    long: message
+                                    takes_value: true
+                                    help: String to pass into a Telegram message.
+                          - token:
+                                    short: t
+                                    long: token
+                                    takes_value: true
+                                    max_values: 1
+                                    help: Sets the Telegram bot token. This ignores the TEPE_TELEGRAM_BOT_TOKEN variable.
+                          - chat_ids:
+                                    short: c
+                                    long: chat
+                                    multiple: true
+                                    takes_value: true
+                                    help: Specifies a new Telegram chat id. This will not ignore the TEPE_TELEGRAM_CHAT_ID variable.
