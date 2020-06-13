@@ -26,10 +26,10 @@ impl TelegramBot {
                 chat_ids.push(
                     id.clone()
                         .into_string()
-                        .cli_expect(&format!("Error parsing chat_id: {:?}", id))
+                        .cli_expect(&format!("Error parsing chat_id:\n\t{:?}", id))
                         .trim()
                         .parse::<i64>()
-                        .cli_expect(&format!("Error parsing chat_id: {:?}", id)),
+                        .cli_expect(&format!("Error parsing chat_id:\n\t{:?}", id)),
                 );
             }
         }

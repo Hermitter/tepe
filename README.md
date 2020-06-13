@@ -2,13 +2,6 @@
 
 Tepe is a CLI that lets you send messages and files over Telegram.
 
-# TODO
-
-- [x] Allow for `token` and multiple `chat` flags.
-- [ ] Improve README.
-- [ ] Proper error handling.
-- [ ] Code cleanup.
-
 # Installation
 
 ### 1. Download Tepe
