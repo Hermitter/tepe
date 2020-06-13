@@ -13,7 +13,7 @@ pub enum Error {
         description: String,
     },
     ParsingError {
-        item: String,
+        description: String,
     },
 }
 
@@ -29,12 +29,14 @@ impl<'a> fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::RequestError { ref description } => {
-                write!(f, "Message failed to send due to:\n\t{}", description)
+                write!(f, "\nMessage failed to send due to:\n\t{}", description)
             }
-            Error::FileNotFound { ref path } => write!(f, "Could not find file:\n\t{}", path),
-            Error::ParsingError { ref item } => write!(f, "Error from parsing:\n\t{}", item),
-            Error::UnreadableMessage => write!(f, "Issue parsing message"),
-            _ => write!(f, "TODO: add error description"),
+            Error::FileNotFound { ref path } => write!(f, "\nCould not find file:\n\t{}", path),
+            Error::ParsingError { ref description } => {
+                write!(f, "\nError from parsing:\n\t{}", description)
+            }
+            Error::UnreadableMessage => write!(f, "\nIssue parsing message"),
+            _ => write!(f, "\nTODO: add error description"),
         }
     }
 }
@@ -51,7 +53,7 @@ impl From<RequestError> for Error {
 impl From<std::num::ParseIntError> for Error {
     fn from(error: std::num::ParseIntError) -> Self {
         Error::ParsingError {
-            item: error.to_string(),
+            description: error.to_string(),
         }
     }
 }

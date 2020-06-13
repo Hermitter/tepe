@@ -12,6 +12,7 @@ pub enum FileGroup {
     Document,
 }
 
+// TODO: look at Telegram's docs to properly group these file extensions
 lazy_static! {
     /// A collection of extensions belonging to a `FileGroup`.
     pub static ref FILE_EXT_HASHMAP: HashMap<&'static OsStr, FileGroup> = {

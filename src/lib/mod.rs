@@ -1,10 +1,11 @@
-use crate::error::{CliExit, Error};
 use clap::ArgMatches;
 use std::process::exit;
 use std::sync::Arc;
 use teloxide::{prelude::*, requests::Request, utils::markdown};
-mod file_ext;
-mod send;
+pub mod error;
+use error::{CliExit, Error};
+pub mod file_ext;
+pub mod send;
 
 pub struct TelegramBot {
     /// Teleoxide representation of a Telegram bot
@@ -26,10 +27,10 @@ impl TelegramBot {
                 chat_ids.push(
                     id.clone()
                         .into_string()
-                        .cli_expect(&format!("Error parsing chat_id:\n\t{:?}", id))
+                        .cli_expect(&format!("\nError parsing chat_id:\n\t{:?}", id))
                         .trim()
                         .parse::<i64>()
-                        .cli_expect(&format!("Error parsing chat_id:\n\t{:?}", id)),
+                        .cli_expect(&format!("\nError parsing chat_id:\n\t{:?}", id)),
                 );
             }
         }
@@ -40,7 +41,7 @@ impl TelegramBot {
                 default_chat_id
                     .trim()
                     .parse::<i64>()
-                    .cli_expect("Error parsing TEPE_TELEGRAM_CHAT_ID"),
+                    .cli_expect("\nError parsing TEPE_TELEGRAM_CHAT_ID"),
             );
         }
 
@@ -49,9 +50,9 @@ impl TelegramBot {
             Some(arg) => arg.vals[0]
                 .clone()
                 .into_string()
-                .cli_expect("Error reading (--token, -t) argument"),
+                .cli_expect("\nError reading (--token, -t) argument"),
             None => std::env::var("TEPE_TELEGRAM_BOT_TOKEN")
-                .cli_expect("TEPE_TELEGRAM_BOT_TOKEN has not been set"),
+                .cli_expect("\nTEPE_TELEGRAM_BOT_TOKEN has not been set"),
         };
 
         Ok(TelegramBot {

@@ -6,9 +6,8 @@ extern crate clap;
 use clap::App;
 use std::ffi::OsString;
 
-pub mod error;
-use error::Error;
 pub mod lib;
+use lib::error::Error;
 
 #[tokio::main]
 async fn main() {
