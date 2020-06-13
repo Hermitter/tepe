@@ -94,12 +94,9 @@ impl TelegramBot {
         Ok(())
     }
 
-    /// Send a text message to the default group_id.
-    pub async fn send_text_message(&self, text: &str) -> Result<(), Error> {
-        for chat_id in &self.chat_ids {
-            self.bot.send_message(chat_id.clone(), text).send().await?;
-        }
-
+    /// Send a text message to the `chat_id`.
+    pub async fn send_text_message(&self, text: &str, chat_id: i64) -> Result<(), Error> {
+        self.bot.send_message(chat_id, text).send().await?;
         Ok(())
     }
 }

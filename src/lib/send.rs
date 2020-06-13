@@ -20,7 +20,7 @@ impl TelegramBot {
                 // text message
                 0 => {
                     if message.len() > 0 {
-                        self.send_text_message(message).await?;
+                        self.send_text_message(message, *chat_id).await?;
                     }
                 }
                 // single file and an optional text caption
@@ -38,7 +38,7 @@ impl TelegramBot {
                     }
 
                     if message.len() > 0 {
-                        self.send_text_message(message).await?;
+                        self.send_text_message(message, *chat_id).await?;
                     }
                 }
             }
