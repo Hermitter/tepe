@@ -44,7 +44,7 @@ async fn run() -> Result<(), Error> {
                 message = message_arg.vals[0].to_str();
             }
 
-            tepe.send(message, files).await;
+            tepe.send(message, files).await?;
         }
         _ => {}
     };

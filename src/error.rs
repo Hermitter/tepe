@@ -6,6 +6,9 @@ pub enum Error {
     Any(Box<dyn StdError + Send + Sync + 'static>),
     UnknownError,
     UnreadableMessage,
+    FileNotFound {
+        path: String,
+    },
     RequestError {
         description: String,
     },
@@ -26,8 +29,9 @@ impl<'a> fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::RequestError { ref description } => {
-                write!(f, "Error sending message due to:\n\t{}", description)
+                write!(f, "Message failed to send due to:\n\t{}", description)
             }
+            Error::FileNotFound { ref path } => write!(f, "Could not find file:\n\t{}", path),
             Error::ParsingError { ref item } => write!(f, "Error from parsing:\n\t{}", item),
             Error::UnreadableMessage => write!(f, "Issue parsing message"),
             _ => write!(f, "TODO: add error description"),
