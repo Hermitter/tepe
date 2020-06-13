@@ -1,4 +1,5 @@
 use super::file_ext::{FileGroup, FILE_EXT_HASHMAP};
+use super::Error;
 use super::TelegramBot;
 use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
@@ -7,39 +8,43 @@ use teloxide::{prelude::*, requests::Request};
 
 impl TelegramBot {
     /// Send a document or text message
-    pub async fn send(&self, message: Option<&str>, file_paths: &Vec<OsString>) {
+    pub async fn send(
+        &self,
+        message: Option<&str>,
+        file_paths: &Vec<OsString>,
+    ) -> Result<(), Error> {
         let message = message.unwrap_or("");
 
         for chat_id in &self.chat_ids {
             match file_paths.len() {
-                // text
+                // text message
                 0 => {
                     if message.len() > 0 {
-                        self.send_text_message(message).await;
+                        self.send_text_message(message).await?;
                     }
                 }
                 // single file and an optional text caption
                 1 => {
                     self.create_file_request(*chat_id, PathBuf::from(&file_paths[0]), message)
                         .send()
-                        .await
-                        .unwrap();
+                        .await?;
                 }
-                // multiple files and an optional text
+                // multiple files and an optional text message
                 _ => {
                     for file_path in file_paths {
                         self.create_file_request(*chat_id, PathBuf::from(file_path), "")
                             .send()
-                            .await
-                            .unwrap();
+                            .await?;
                     }
 
                     if message.len() > 0 {
-                        self.send_text_message(message).await;
+                        self.send_text_message(message).await?;
                     }
                 }
             }
         }
+
+        Ok(())
     }
 
     /// Creates file specific Telegram requests for any file. Empty string captions are not sent to Telegram.
@@ -51,6 +56,7 @@ impl TelegramBot {
     ) -> Box<dyn Request<Output = Message>> {
         let ext_name = file.extension().unwrap_or(OsStr::new(""));
 
+        // set file group to document, if nothing is found
         let file_group = FILE_EXT_HASHMAP
             .get(ext_name)
             .unwrap_or(&FileGroup::Document);

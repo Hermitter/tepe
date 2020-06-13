@@ -7,10 +7,15 @@ use clap::App;
 use std::ffi::OsString;
 
 pub mod error;
+use error::Error;
 pub mod lib;
 
 #[tokio::main]
 async fn main() {
+    run().await.unwrap_or_else(|error| error.exit());
+}
+
+async fn run() -> Result<(), Error> {
     let yaml = load_yaml!("cli.yml");
     let app = App::from_yaml(yaml).get_matches();
 
@@ -19,12 +24,12 @@ async fn main() {
     match app.subcommand() {
         ("test", Some(_sub_cmd)) => {
             let cmd = app.subcommand().1.unwrap();
-            lib::TelegramBot::from_clap(&cmd).reply_chat_id().await;
+            lib::TelegramBot::from_clap(&cmd)?.reply_chat_id().await?;
         }
 
         ("send", Some(_sub_cmd)) => {
             let cmd = app.subcommand().1.unwrap();
-            let tepe = lib::TelegramBot::from_clap(&cmd);
+            let tepe = lib::TelegramBot::from_clap(&cmd)?;
 
             let mut files = &Vec::<OsString>::new();
             let mut message = None;
@@ -43,4 +48,6 @@ async fn main() {
         }
         _ => {}
     };
+
+    Ok(())
 }

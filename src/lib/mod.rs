@@ -1,4 +1,4 @@
-use crate::error::Error;
+use crate::error::{CliExit, Error};
 use clap::ArgMatches;
 use std::process::exit;
 use std::sync::Arc;
@@ -16,28 +16,31 @@ pub struct TelegramBot {
 
 impl TelegramBot {
     /// Instantiate a Telegram bot from CLAP flags or default to environment variables.
-    pub fn from_clap(command: &ArgMatches) -> TelegramBot {
+    // TODO: change `cli_expect` to something that returns `crate::Error`
+    pub fn from_clap(command: &ArgMatches) -> Result<TelegramBot, Error> {
         let mut chat_ids = Vec::<i64>::new();
 
-        // chat_id from flags
+        // get chat_ids from flags
         if let Some(args) = command.args.get("chat_ids") {
-            args.vals.iter().for_each(|id| {
+            for id in args.vals.iter() {
                 chat_ids.push(
                     id.clone()
                         .into_string()
-                        .expect(&format!("Error parsing chat_id: {:?}", id))
+                        .cli_expect(&format!("Error parsing chat_id: {:?}", id))
+                        .trim()
                         .parse::<i64>()
-                        .expect(&format!("Error parsing chat_id: {:?}", id)),
+                        .cli_expect(&format!("Error parsing chat_id: {:?}", id)),
                 );
-            });
+            }
         }
 
-        // chat_id from environment
+        // get chat_id from environment variable
         if let Some(default_chat_id) = std::env::var("TEPE_TELEGRAM_CHAT_ID").ok() {
             chat_ids.push(
                 default_chat_id
+                    .trim()
                     .parse::<i64>()
-                    .expect("Error parsing TEPE_TELEGRAM_CHAT_ID"),
+                    .cli_expect("Error parsing TEPE_TELEGRAM_CHAT_ID"),
             );
         }
 
@@ -46,19 +49,19 @@ impl TelegramBot {
             Some(arg) => arg.vals[0]
                 .clone()
                 .into_string()
-                .expect("Could not read (--token, -t) argument"),
+                .cli_expect("Error reading (--token, -t) argument"),
             None => std::env::var("TEPE_TELEGRAM_BOT_TOKEN")
-                .expect("TEPE_TELEGRAM_BOT_TOKEN has not been set"),
+                .cli_expect("TEPE_TELEGRAM_BOT_TOKEN has not been set"),
         };
 
-        TelegramBot {
+        Ok(TelegramBot {
             bot: Bot::new(token),
             chat_ids,
-        }
+        })
     }
 
-    /// A one time response to a chat with the current chat_id
-    pub async fn reply_chat_id(&self) {
+    /// Print and send the Telegram `chat_id` to the first user response.
+    pub async fn reply_chat_id(&self) -> Result<(), Error> {
         println!("*********************************************************************\nYour Telegram bot is now running! Try sending a message.\nOn success, the chat_id is printed.");
 
         Dispatcher::new(self.bot.clone())
@@ -70,31 +73,33 @@ impl TelegramBot {
                         &message.chat_id().to_string()
                     );
 
-                    message
+                    let request = message
                         .answer(response)
                         .parse_mode(teloxide::types::ParseMode::MarkdownV2)
                         .send()
-                        .await.unwrap();
+                        .await;
 
-                    println!("{}", format!("\nSuccessful reply from chat_id: {}\n*********************************************************************", &message.chat_id()));
-                    exit(0);
+                    // exit and print a success or error message
+                    match request {
+                        Ok(message) => {
+                            println!("{}", format!("\nSuccessful reply from chat_id: {}\n*********************************************************************", &message.chat_id()));
+                            exit(0);}
+                        Err(error) => {Error::from(error).exit()}
+                    }
                 })
             })
             .dispatch()
             .await;
+
+        Ok(())
     }
 
     /// Send a text message to the default group_id.
-    pub async fn send_text_message(&self, text: &str) {
+    pub async fn send_text_message(&self, text: &str) -> Result<(), Error> {
         for chat_id in &self.chat_ids {
-            self.bot
-                .send_message(chat_id.clone(), text)
-                .send()
-                .await
-                .unwrap_or_else(|err| {
-                    eprintln!("Error sending message: {}", err);
-                    std::process::exit(1);
-                });
+            self.bot.send_message(chat_id.clone(), text).send().await?;
         }
+
+        Ok(())
     }
 }
