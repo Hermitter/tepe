@@ -1,4 +1,6 @@
+use crate::error::Error;
 use clap::ArgMatches;
+use std::process::exit;
 use std::sync::Arc;
 use teloxide::{prelude::*, requests::Request, utils::markdown};
 mod file_ext;
@@ -13,8 +15,8 @@ pub struct TelegramBot {
 }
 
 impl TelegramBot {
-    /// Instantiate a Telegram bot from function arguments.
-    pub fn from(command: &ArgMatches) -> TelegramBot {
+    /// Instantiate a Telegram bot from CLAP flags or default to environment variables.
+    pub fn from_clap(command: &ArgMatches) -> TelegramBot {
         let mut chat_ids = Vec::<i64>::new();
 
         // chat_id from flags
@@ -72,12 +74,10 @@ impl TelegramBot {
                         .answer(response)
                         .parse_mode(teloxide::types::ParseMode::MarkdownV2)
                         .send()
-                        .await
-                        .log_on_error()
-                        .await;
+                        .await.unwrap();
 
                     println!("{}", format!("\nSuccessful reply from chat_id: {}\n*********************************************************************", &message.chat_id()));
-                    std::process::exit(0);
+                    exit(0);
                 })
             })
             .dispatch()
