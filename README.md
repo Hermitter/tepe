@@ -66,9 +66,10 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -c, --chat <chat_ids>...    Telegram chat id.
+    -c, --chat <chat_ids>...    Specifies a new Telegram chat id. This will not ignore the TEPE_TELEGRAM_CHAT_ID
+                                variable.
     -m, --message <message>     String to pass into a Telegram message.
-    -t, --token <token>         Telegram bot token.
+    -t, --token <token>         Sets the Telegram bot token. This ignores the TEPE_TELEGRAM_BOT_TOKEN variable.
 
 ARGS:
     <files>...
