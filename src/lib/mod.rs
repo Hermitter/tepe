@@ -1,5 +1,4 @@
 use clap::ArgMatches;
-use std::process::exit;
 use std::sync::Arc;
 use teloxide::{prelude::*, requests::Request, utils::markdown};
 pub mod error;
@@ -84,7 +83,7 @@ impl TelegramBot {
                     match request {
                         Ok(message) => {
                             println!("{}", format!("\nSuccessful reply from chat_id: {}\n*********************************************************************", &message.chat_id()));
-                            exit(0);}
+                        }
                         Err(error) => {Error::from(error).exit()}
                     }
                 })
