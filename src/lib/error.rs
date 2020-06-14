@@ -15,6 +15,7 @@ pub enum Error {
     ParsingError {
         description: String,
     },
+    MissingChatId,
 }
 
 impl Error {
@@ -32,6 +33,9 @@ impl<'a> fmt::Display for Error {
                 write!(f, "\nMessage failed to send due to:\n\t{}", description)
             }
             Error::FileNotFound { ref path } => write!(f, "\nCould not find file:\n\t{}", path),
+            Error::MissingChatId => {
+                write!(f, "\nChat ID not found in flags or TEPE_TELEGRAM_CHAT_ID")
+            }
             Error::ParsingError { ref description } => {
                 write!(f, "\nError from parsing:\n\t{}", description)
             }
