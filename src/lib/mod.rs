@@ -62,7 +62,7 @@ impl TelegramBot {
 
     /// Print and send the Telegram `chat_id` to the first user response.
     pub async fn reply_chat_id(self) -> Result<(), Error> {
-        println!("*********************************************************************\nYour Telegram bot is now running! Try sending a message.\nOn success, the chat_id is printed.\n\nPress Ctrl+c to exit.");
+        println!("*********************************************************************\nYour Telegram bot is now running! Try sending it a message on Telegram.\nOn success, the chat_id is printed.\n\nPress Ctrl+c to exit.");
 
         Dispatcher::new(self.bot)
             .messages_handler(|rx: DispatcherHandlerRx<Message>| {

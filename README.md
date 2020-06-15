@@ -47,7 +47,7 @@ Example output:
 
 ```
 *********************************************************************
-Your Telegram bot is now running! Try sending a message.
+Your Telegram bot is now running! Try sending it a message on Telegram.
 On success, the chat_id is printed.
 
 Press Ctrl+c to exit.
