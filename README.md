@@ -1,5 +1,7 @@
 # Overview
 
+[![Crate](https://img.shields.io/crates/v/matrix-rhal.svg)](https://crates.io/crates/tepe)
+
 Wondering if your build finished? Tepe is a CLI that lets you command a bot to send messages and files over Telegram.
 
 ![](assets/preview.gif)
