@@ -1,5 +1,5 @@
 name: Tepe
-version: "0.0.0"
+version: "0.0.1"
 author: Hermitter
 about: Send messages and files through a telegram bot.
 args:
