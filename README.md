@@ -78,8 +78,6 @@ Example command:
 tepe send -c 923567462 ./shopping_list.txt ./some_photo.png -m "here are your things"
 ```
 
-Usage:
-
 ```bash
 USAGE:
     tepe send [OPTIONS] [--] [files]...
