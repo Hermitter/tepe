@@ -32,7 +32,9 @@ impl<'a> fmt::Display for Error {
             Error::RequestError { ref description } => {
                 write!(f, "\nMessage failed to send due to:\n\t{}", description)
             }
-            Error::FileNotFound { ref path } => write!(f, "\nCould not find file:\n\t{}", path),
+            Error::FileNotFound { ref path } => {
+                write!(f, "\nCould not find file in path:\n\t{}", path)
+            }
             Error::MissingChatId => {
                 write!(f, "\nChat ID not found in flags or TEPE_TELEGRAM_CHAT_ID")
             }
