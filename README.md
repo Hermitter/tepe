@@ -1,10 +1,14 @@
 # Overview
 
-Tepe is a CLI that lets you send messages and files over Telegram.
+Tepe is a CLI that lets you command a bot to send messages and files over Telegram.
+
+![](assets/preview.gif)
+
+Stop hoovering over your computer to see if your build has finished. Leave and wait for Telegram to tell you!
 
 # Installation
 
-### 1. Download Tepe
+## 1. Download Tepe
 
 Be sure you've [installed Rust](http://rustup.rs/) on your computer.
 
@@ -13,11 +17,11 @@ git clone https://github.com/Hermitter/tepe && cd tepe
 cargo install --path .
 ```
 
-### 2. Create Your Bot & Export The Bot Token
+## 2. Create Your Bot and Save the Token
 
 Talk to [@Botfather](https://t.me/botfather) and go through some dialog options until you've successfully created a bot. You should receive a token in the format of `123456789:blablabla`
 
-Once your bot is created, export its token as an environmental variable.
+Export the token by exposing it as an environmental variable
 
 ```bash
 # Unix-like
@@ -29,35 +33,44 @@ export TEPE_TELEGRAM_BOT_TOKEN=__Place_Bot_Token_Here__
 set TEPE_TELEGRAM_BOT_TOKEN=__Place_Bot_Token_Here__
 ```
 
-### 3. Find Your Chat ID
+## 3. Find the Chat ID with your Bot
 
-Use the following command to have your bot wait for a user response. Once received, the bot will print the `chat_id` and exit.
+You can start talking to your bot by visiting (https://t.me/YOUR_BOT_NAME_HERE).
+
+Once inside the chat, run the following command. The bot will print the `chat_id` of any chatroom that messages it.
 
 ```
 tepe test
 ```
 
-You can start talking to your bot by visiting (https://t.me/YOUR_BOT_NAME_HERE).
+Example output:
 
-### 4. Send Messages
+```
+*********************************************************************
+Your Telegram bot is now running! Try sending a message.
+On success, the chat_id is printed.
 
-Export your `chat_id` by exposing it as an environmental variable
+Press Ctrl+c to exit.
 
-```bash
-# Unix-like
-export TEPE_TELEGRAM_CHAT_ID=__Place_Chat_Id_Here__
+Successful reply from chat_id: 923567462
+*********************************************************************
 ```
 
-```bash
-# Windows
-set TEPE_TELEGRAM_CHAT_ID=__Place_Chat_Id_Here__
-```
+## 4. Send Messages
+
+> TEPE_TELEGRAM_CHAT_ID can be used to avoid setting the same `chat_id` every time
 
 You're now ready to send messages!
 
-```bash
-# Example: $ tepe send ./taxes.txt -m "here are your taxes"
+Example command:
 
+```bash
+tepe send ./shopping_list.txt ./some_photo.png -m "here are your things"
+```
+
+Usage:
+
+```bash
 USAGE:
     tepe send [OPTIONS] [--] [files]...
 
