@@ -1,10 +1,8 @@
 # Overview
 
-Tepe is a CLI that lets you command a bot to send messages and files over Telegram.
+Wondering if your build finished? Tepe is a CLI that lets you command a bot to send messages and files over Telegram.
 
 ![](assets/preview.gif)
-
-Stop hoovering over your computer to see if your build has finished. Leave and wait for Telegram to tell you!
 
 # Installation
 
