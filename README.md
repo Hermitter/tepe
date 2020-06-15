@@ -10,7 +10,7 @@ Wondering if your build finished? Tepe is a CLI that lets you command a bot to s
 
 ## 1. Download Tepe
 
-> Before continuing, be sure you've [installed Rust](http://rustup.rs/) on your computer.
+> Before continuing, be sure you've installed [Rust](http://rustup.rs/) on your computer.
 
 Install Tepe through one of the following:
 
