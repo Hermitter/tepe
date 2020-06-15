@@ -68,14 +68,14 @@ Successful reply from chat_id: 923567462
 
 ## 4. Send Messages
 
-> TEPE_TELEGRAM_CHAT_ID can be used to avoid setting the same `chat_id` every time
+> TEPE_TELEGRAM_CHAT_ID can be set to avoid setting the same `chat_id` every time
 
 You're now ready to send messages!
 
 Example command:
 
 ```bash
-tepe send ./shopping_list.txt ./some_photo.png -m "here are your things"
+tepe send -c 923567462 ./shopping_list.txt ./some_photo.png -m "here are your things"
 ```
 
 Usage:
