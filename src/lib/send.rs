@@ -13,6 +13,10 @@ impl TelegramBot {
         message: Option<&str>,
         file_paths: &Vec<OsString>,
     ) -> Result<(), Error> {
+        if self.chat_ids.is_empty() {
+            return Err(Error::MissingChatId);
+        }
+
         let message = message.unwrap_or("");
 
         for chat_id in &self.chat_ids {

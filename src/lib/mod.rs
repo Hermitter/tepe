@@ -56,12 +56,7 @@ impl TelegramBot {
 
         Ok(TelegramBot {
             bot: Bot::new(token),
-            chat_ids: {
-                if chat_ids.is_empty() {
-                    return Err(Error::MissingChatId);
-                }
-                chat_ids
-            },
+            chat_ids: chat_ids,
         })
     }
 
