@@ -60,7 +60,7 @@ impl TelegramBot {
     ) -> Result<Box<dyn Request<Output = Message>>, Error> {
         let ext_name = file.extension().unwrap_or(OsStr::new(""));
 
-        if !file.exists() {
+        if !file.is_file() {
             return Err(Error::FileNotFound {
                 path: String::from(format!("{:?}", file)),
             });
