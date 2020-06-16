@@ -21,7 +21,7 @@ git clone https://github.com/Hermitter/tepe && cd tepe
 cargo install --path .
 ```
 
-- From [Crates.io](https://crates.io/crates/tepe):
+- From [crates.io](https://crates.io/crates/tepe):
 
 ```bash
 cargo install tepe
