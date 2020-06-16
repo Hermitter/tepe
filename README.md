@@ -1,4 +1,4 @@
-# Overview
+# Tepe
 
 [![Crate](https://img.shields.io/crates/v/tepe.svg)](https://crates.io/crates/tepe)
 
