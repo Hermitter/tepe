@@ -1,17 +1,10 @@
 name: Tepe
-version: "0.0.1"
+version: "0.0.2"
 author: Hermitter
 about: Send messages and files through a telegram bot.
-args:
-        - config:
-                  short: c
-                  long: config
-                  value_name: FILE
-                  help: Sets a custom config file
-                  takes_value: true
 subcommands:
         - test:
-                  about: Test to check that the bot is properly working. Once messaged, the bot will respond reply with the chat_id
+                  about: Verify that the bot is properly working. Message the bot on Telegram to receive a chat_id.
                   args:
                           - token:
                                     short: t
