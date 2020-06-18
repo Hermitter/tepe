@@ -16,6 +16,7 @@ pub enum Error {
         description: String,
     },
     MissingChatId,
+    NoInput,
 }
 
 impl Error {
@@ -38,6 +39,7 @@ impl<'a> fmt::Display for Error {
             Error::MissingChatId => {
                 write!(f, "\nChat ID not found in flags or TEPE_TELEGRAM_CHAT_ID")
             }
+            Error::NoInput => write!(f, "\nNo input was given"),
             Error::ParsingError { ref description } => {
                 write!(f, "\nError from parsing:\n\t{}", description)
             }

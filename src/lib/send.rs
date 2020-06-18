@@ -17,6 +17,10 @@ impl TelegramBot {
             return Err(Error::MissingChatId);
         }
 
+        if file_paths.is_empty() && message.is_none() {
+            return Err(Error::NoInput);
+        }
+
         let message = message.unwrap_or("");
 
         for chat_id in &self.chat_ids {

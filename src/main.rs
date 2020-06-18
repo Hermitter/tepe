@@ -45,7 +45,7 @@ async fn run() -> Result<(), Error> {
 
             tepe.send(message, files).await?;
         }
-        _ => {}
+        _ => return Err(Error::NoInput),
     };
 
     Ok(())
