@@ -19,27 +19,26 @@ async fn run() -> Result<(), Error> {
     let app = App::from_yaml(yaml).get_matches();
 
     // Handle each command
-    // TODO: use _sub_cmd instead of app.subcommand
     match app.subcommand() {
-        ("test", Some(_sub_cmd)) => {
-            let cmd = app.subcommand().1.unwrap();
-            lib::TelegramBot::from_clap(&cmd)?.reply_chat_id().await?;
+        ("test", Some(sub_cmd)) => {
+            lib::TelegramBot::from_clap(sub_cmd)?
+                .reply_chat_id()
+                .await?;
         }
 
-        ("send", Some(_sub_cmd)) => {
-            let cmd = app.subcommand().1.unwrap();
-            let tepe = lib::TelegramBot::from_clap(&cmd)?;
+        ("send", Some(sub_cmd)) => {
+            let tepe = lib::TelegramBot::from_clap(&sub_cmd)?;
 
             let mut files = &Vec::<OsString>::new();
             let mut message = None;
 
             // get file paths
-            if let Some(file_args) = cmd.args.get("files") {
+            if let Some(file_args) = sub_cmd.args.get("files") {
                 files = &file_args.vals;
             }
 
             // get message
-            if let Some(message_arg) = cmd.args.get("message") {
+            if let Some(message_arg) = sub_cmd.args.get("message") {
                 message = message_arg.vals[0].to_str();
             }
 
