@@ -997,7 +997,7 @@ dependencies = [
 
 [[package]]
 name = "tepe"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "clap",
  "lazy_static",
