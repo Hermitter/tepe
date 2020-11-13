@@ -15,7 +15,8 @@ Install Tepe from one of the following:
 
 - [Release Page](https://github.com/Hermitter/tepe/releases/latest)
 ```bash
-wget https://github.com/Hermitter/tepe/releases/latest/download/tepe
+# linux-amd64 is the only precompiled release for now
+curl -L https://github.com/Hermitter/tepe/releases/latest/download/tepe-linux-amd64 -o tepe
 chmod +x ./tepe
 ```
 
