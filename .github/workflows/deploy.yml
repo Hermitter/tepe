@@ -1,4 +1,4 @@
-name: crates.io Deployment
+name: Deployment
 on:
   push:
     tags:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Deploy Crate.io
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       # Build package #
