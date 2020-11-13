@@ -17,6 +17,9 @@ jobs:
       - name: Build Binary
         run: cargo build --release
 
+      - name: Reduce Binary Size
+        run: strip -s ./target/release/tepe
+
       # Cargo publish #
       - name: Cargo Login
         run: cargo login ${{ secrets.CRATES_IO_API_KEY }}
@@ -44,5 +47,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/release/tepe
-          asset_name: tepe
+          asset_name: tepe-linux-amd64
           asset_content_type: application/bin
