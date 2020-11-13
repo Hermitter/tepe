@@ -1,0 +1,48 @@
+name: crates.io Deployment
+on:
+  push:
+    tags:
+      - v0.*
+      - v1.*
+
+jobs:
+  build:
+    name: Deploy Crate.io
+    runs-on: ubuntu-latest
+    steps:
+      # Build package #
+      - name: Download Repository
+        uses: actions/checkout@v2
+
+      - name: Build Binary
+        run: cargo build --release
+
+      # Cargo publish #
+      - name: Cargo Login
+        run: cargo login ${{ secrets.CRATES_IO_API_KEY }}
+
+      - name: Publish Crate
+        run: cargo publish
+
+      # GitHub Release #
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload GitHub Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/release/tepe
+          asset_name: tepe
+          asset_content_type: application/bin
