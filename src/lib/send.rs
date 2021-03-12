@@ -35,16 +35,14 @@ impl TelegramBot {
                 1 => {
                     self.create_file_request(*chat_id, PathBuf::from(&file_paths[0]), message)?
                         .send()
-                        .await
-                        .unwrap();
+                        .await??;
                 }
                 // multiple files and an optional text message
                 _ => {
                     for file_path in file_paths {
                         self.create_file_request(*chat_id, PathBuf::from(file_path), "")?
                             .send()
-                            .await
-                            .unwrap();
+                            .await??;
                     }
 
                     if message.len() > 0 {
