@@ -1,6 +1,5 @@
 use clap::ArgMatches;
-use std::sync::Arc;
-use teloxide::{prelude::*, requests::Request, utils::markdown};
+use teloxide::{prelude::*, requests::Request, utils::markdown, BotBuilder};
 pub mod error;
 use error::{CliExit, Error};
 pub mod file_ext;
@@ -8,7 +7,7 @@ pub mod send;
 
 pub struct TelegramBot {
     /// Teleoxide representation of a Telegram bot
-    pub bot: Arc<Bot>,
+    pub bot: Bot,
 
     /// Default destination for messages
     pub chat_ids: Vec<i64>,
@@ -55,7 +54,7 @@ impl TelegramBot {
         };
 
         Ok(TelegramBot {
-            bot: Bot::new(token),
+            bot: Bot::builder().token(token).build(),
             chat_ids: chat_ids,
         })
     }
