@@ -4,6 +4,9 @@ use std::{error::Error as StdError, fmt};
 pub enum Error {
     /// Some unspecified error.
     Any(Box<dyn StdError + Send + Sync + 'static>),
+    TokioError {
+        description: String,
+    },
     UnknownError,
     UnreadableMessage,
     FileNotFound {
@@ -30,7 +33,7 @@ impl Error {
 impl<'a> fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Error::RequestError { ref description } => {
+            Error::RequestError { ref description } | Error::TokioError { ref description } => {
                 write!(f, "\nMessage failed to send due to:\n\t{}", description)
             }
             Error::FileNotFound { ref path } => {
@@ -53,6 +56,15 @@ use teloxide::RequestError;
 impl From<RequestError> for Error {
     fn from(error: RequestError) -> Self {
         Error::RequestError {
+            description: format!("{}", error),
+        }
+    }
+}
+
+use tokio::io::Error as TokioError;
+impl From<TokioError> for Error {
+    fn from(error: TokioError) -> Self {
+        Error::TokioError {
             description: format!("{}", error),
         }
     }

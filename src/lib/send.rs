@@ -4,7 +4,7 @@ use super::TelegramBot;
 use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use teloxide::types::InputFile;
-use teloxide::{prelude::*, requests::Request};
+use teloxide::{prelude::*, requests::RequestWithFile};
 
 impl TelegramBot {
     /// Send a document or text message
@@ -35,14 +35,14 @@ impl TelegramBot {
                 1 => {
                     self.create_file_request(*chat_id, PathBuf::from(&file_paths[0]), message)?
                         .send()
-                        .await?;
+                        .await??;
                 }
                 // multiple files and an optional text message
                 _ => {
                     for file_path in file_paths {
                         self.create_file_request(*chat_id, PathBuf::from(file_path), "")?
                             .send()
-                            .await?;
+                            .await??;
                     }
 
                     if message.len() > 0 {
@@ -61,7 +61,7 @@ impl TelegramBot {
         chat_id: i64,
         file: PathBuf,
         caption: &str,
-    ) -> Result<Box<dyn Request<Output = Message>>, Error> {
+    ) -> Result<Box<dyn RequestWithFile<Output = Message>>, Error> {
         let ext_name = file.extension().unwrap_or(OsStr::new(""));
 
         if !file.is_file() {
