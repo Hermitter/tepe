@@ -1,5 +1,5 @@
 use clap::ArgMatches;
-use teloxide::{prelude::*, requests::Request, utils::markdown, BotBuilder};
+use teloxide::{prelude::*, requests::Request, utils::markdown};
 pub mod error;
 use error::{CliExit, Error};
 pub mod file_ext;
