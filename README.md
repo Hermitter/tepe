@@ -9,24 +9,32 @@ Wondering if your build finished? Tepe is a CLI that lets you command a bot to s
 # Installation
 
 ## 1. Download Tepe
-> Installing from source or Crates.io requires [Rust](http://rustup.rs/) on your computer.
+> Installing from source/crates.io requires [Rust](http://rustup.rs/) on your computer.
+> Linux users will also need to have openssl dev files installed.
+> ```
+>   - Debian: sudo apt install libssl-dev
+>   - Fedora: sudo dnf install openssl-devel
+>   - Alpine: sudo apk add openssl-dev
+>```
 
 Install Tepe from one of the following:
 
-- [Release Page](https://github.com/Hermitter/tepe/releases/latest)
+- [Prebuilt Releases](https://github.com/Hermitter/tepe/releases)
 ```bash
-# linux-amd64 is the only precompiled release for now
-curl -L https://github.com/Hermitter/tepe/releases/latest/download/tepe-linux-amd64 -o tepe
+# Currently built for x86_64 Linux, Windows, and macOS.
+# linux x86_64 setup example
+curl -L https://github.com/Hermitter/tepe/releases/latest/download/tepe-x86_64-unknown-linux-musl -o tepe
 chmod +x ./tepe
 ```
 
-- [Crates.io](https://crates.io/crates/tepe):
+- **[Crates.io](https://crates.io/crates/tepe)**
+
 
 ```bash
 cargo install tepe
 ```
 
-- Source:
+- Source
 
 ```bash
 git clone https://github.com/Hermitter/tepe && cd tepe
