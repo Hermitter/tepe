@@ -1,0 +1,13 @@
+name: Cargo Publish
+on:
+  push:
+    tags:
+      - v0.*
+
+jobs:
+  build:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish Crate
+        run: cargo publish --token ${{ secrets.CRATES_IO_API_KEY }}

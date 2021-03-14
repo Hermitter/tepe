@@ -1,0 +1,108 @@
+name: Build/Upload Binaries
+on:
+  push:
+    tags:
+      - v0.*
+
+jobs:
+  default:
+    name: ${{ matrix.platforms.target }}
+    runs-on: ${{ matrix.platforms.os }}
+    env:
+      bin_path: "./target/${{ matrix.platforms.target }}/release/tepe${{ matrix.platforms.bin_ext }}"
+      new_bin_path: "./tepe-${{ matrix.platforms.target }}${{ matrix.platforms.bin_ext }}"
+    strategy:
+      matrix:
+        platforms:
+          - {
+              os: "windows-latest",
+              target: "x86_64-pc-windows-msvc",
+              cross: false,
+              bin_ext: ".exe",
+            }
+          - {
+              os: "macOS-latest",
+              target: "x86_64-apple-darwin",
+              cross: false,
+              bin_ext: "",
+            }
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.platforms.target }}
+          override: true
+
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: ${{ matrix.platforms.cross }}
+          command: build
+          args: --release --target=${{ matrix.platforms.target }}
+
+      - name: Rename/Move Binary
+        run: mv ${{ env.bin_path }} ${{ env.new_bin_path }}
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.platforms.target }}
+          path: ${{ env.new_bin_path }}
+          if-no-files-found: error
+
+  x86_64-unknown-linux-musl:
+    # This build targets x86_64-unknown-linux-musl to create a static binary.
+    # Learn more: https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html#musl-support-for-fully-static-binaries
+    name: x86_64-unknown-linux-musl
+    runs-on: ubuntu-latest
+    container: { image: "rust:alpine3.13" }
+    steps:
+      - name: Add Alpine Packages
+        run: apk add openssl-dev musl-dev perl make --no-cache
+
+      - name: Download Repository
+        uses: actions/checkout@v2
+
+      - name: Build Binary
+        run: cargo build --release --features vendored-openssl
+
+      - name: Rename/Move Binary
+        run: mv ./target/release/tepe ./tepe-x86_64-unknown-linux-musl
+
+      - name: Reduce Binary Size
+        run: strip -s ./tepe-x86_64-unknown-linux-musl
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64-unknown-linux-musl
+          path: ./tepe-x86_64-unknown-linux-musl
+          if-no-files-found: error
+
+  publish:
+    name: Github Release
+    needs: [default, x86_64-unknown-linux-musl]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      # Each file is stored under: ./artifact_name/file_name
+      - name: Download Binaries
+        uses: actions/download-artifact@v2
+
+      - name: Upload
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ./*/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
