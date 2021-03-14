@@ -8,10 +8,14 @@ repository = "https://github.com/Hermitter/tepe"
 license = "MIT"
 description = "A CLI to command a bot to send messages and files over Telegram."
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 teloxide = "0.3.4"
 tokio = { version =  "0.2.11", features = ["rt-threaded", "macros"] }
 clap = {version = "2.33.1", features = ["yaml"]}
 lazy_static = "1.4.0"
+
+# Statically link openssl for binaries
+openssl = { version = '0.10', features = ["vendored"], optional = true }
+
+[features]
+vendored-openssl = ["openssl"]
