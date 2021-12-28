@@ -19,14 +19,6 @@ Wondering if your build finished? Tepe is a CLI that lets you command a bot to s
 
 Install Tepe from one of the following:
 
-- [Prebuilt Releases](https://github.com/Hermitter/tepe/releases)
-```bash
-# Currently built for x86_64 Linux, Windows, and macOS.
-# linux x86_64 setup example
-curl -L https://github.com/Hermitter/tepe/releases/latest/download/tepe-x86_64-unknown-linux-musl -o tepe
-chmod +x ./tepe
-```
-
 - **[Crates.io](https://crates.io/crates/tepe)**
 
 
@@ -39,6 +31,14 @@ cargo install tepe
 ```bash
 git clone https://github.com/Hermitter/tepe && cd tepe
 cargo install --path .
+```
+
+- [Prebuilt Releases](https://github.com/Hermitter/tepe/releases)
+```bash
+# Currently built for x86_64 Linux, Windows, and macOS.
+# linux x86_64 setup example
+curl -L https://github.com/Hermitter/tepe/releases/latest/download/tepe-x86_64-unknown-linux-musl -o tepe
+chmod +x ./tepe
 ```
 
 ## 2. Create Your Bot and Save the Token
